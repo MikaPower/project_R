@@ -6,8 +6,7 @@ library(ggplot2)
 
 library(forecast)
 
-# Load ggplot2
-library(ggplot2)
+
 
 
 
@@ -17,8 +16,9 @@ library(ggplot2)
 ##  Load data
 ##  Create time series
 ###########################################################
-
-path <- "C:/Users/Nuno/IdeaProjects/project_R/"
+#mac path
+path <-'/Users/nuno/IdeaProjects/project_R/'
+#path <- "C:/Users/Nuno/IdeaProjects/project_R/"
 setwd(paste(path, "data/", sep = ""))
 
 gt <- read.csv("indian_food.csv",header = TRUE)
@@ -41,7 +41,6 @@ title(main = "Frequencias tempo de cozedura")
 
 
 #Pratos vegetarios vs não vegetarianos
-hist(gt$diet, breaks = 1,plot=F)
 
 my_table <- table(gt$diet)
 
@@ -84,7 +83,27 @@ ggplot(data, aes(ymax=ymax, ymin=ymin, xmax=4, xmin=3, fill=group)) +
 #Comidas mais pedidas
 par(mfrow=c(1,1))
 
-barplot(table(gt$course), col = "skyblue", ylim = c(0,max(table(gt$course))+30),
-        xlab = "Married", ylab = "Proportion", main = "Marital Status",
+library(RColorBrewer)
+coul <- brewer.pal(5, "Set2")
+barplot(table(gt$course), col = coul, ylim = c(0,max(table(gt$course))+30),
+        xlab = "tipos", ylab = "Proportion", main = "Tipo de comida",
         names = row.names(table(gt$course)))
+
+
+barplot(table(gt$course), col=coul)
+
 box()
+
+
+#Vegans e nao vegans por regiao
+# eliminar outras variaveis
+
+agg <-gt[,c(-1,-2,-4,-5,-6,-7,-8)]
+
+test <- data.frame(table(agg$diet,agg$region))
+#colnames(test) <- c('tipo de comeder','cidade','freq')
+
+# Barplot vertical
+
+ggplot(test, aes(x=Var2, y=Freq, fill = Var1), xlib = 'teste' ,ylib = 'Frequencia') +
+  geom_bar(stat = "identity")
