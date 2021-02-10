@@ -8,7 +8,7 @@ path <-'/Users/nuno/IdeaProjects/project_R/'
 #path <- "C:/Users/Nuno/IdeaProjects/project_R/"
 setwd(paste(path, "data/thesis", sep = ""))
 # Load dataset from github
-data <- read.csv("teste1_iphone.csv", header = TRUE,sep = '|')
+data <- read.csv("apple_watch_1_direita.csv", header = TRUE,sep = '|')
 
 #data <- select(data,-7,-11:-41)
 
@@ -26,7 +26,7 @@ data <- read.csv("teste1_iphone.csv", header = TRUE,sep = '|')
 #data$loggingTime.txt. <- sapply(data$loggingTime.txt., join_times)
 
 acelo<- data.frame(
-  day = data$loggingSample.N.,
+  day = data$accelerometerTimestamp_sinceReboot.s.,
   value = data$accelerometerAccelerationX.G.)
 
 
@@ -39,7 +39,7 @@ p
 
 # Format 3: Several variables for each date
 info_acel <- data.frame(
-  time=data$loggingSample.N.,
+  time=data$accelerometerTimestamp_sinceReboot.s.,
   accX=data$accelerometerAccelerationX.G.,
   accY=data$accelerometerAccelerationY.G.,
   accZ=data$accelerometerAccelerationZ.G.
@@ -62,42 +62,42 @@ plot(x,type = "o",col = "red", xlab = "HZ", ylab = "Valores",
   geom_line(aes(colour=variable))
 
 # Accelarometer raw
-data_1 <- as.vector(as.matrix(data[,c(3,4,6)]))
-names <- colnames(data[4:6])
+data_1 <- as.vector(as.matrix(data[,c(3,4,5)]))
+names <- colnames(data[3:5])
 column_names <- sort(rep(names,nrow(data)))
 
-final <- data.frame(x=data$loggingSample.N.,val = data_1,
+final <- data.frame(x=data$accelerometerTimestamp_sinceReboot.s.,val = data_1,
                     variable = column_names)
 
 
-ggplot(data = final, aes(x=x, y=val)) + geom_line(aes(colour=variable))+xlim(c(0,500))+ggtitle("Raw Acce Data")
+ggplot(data = final, aes(x=x, y=val)) + geom_line(aes(colour=variable))+ggtitle("Raw Acce Data")
 
 #Accelarometer core motion
-core_motion <- select(data,-1:-17,-21:-41)
+core_motion <- select(data,-1:-12,-16:-29)
 
 data_1 <- as.vector(as.matrix(core_motion))
-names <- colnames(data[18:20])
+names <- colnames(data[13:15])
 column_names <- sort(rep(names,nrow(data)))
 
-final <- data.frame(x=data$loggingSample.N.,val = data_1,
+final <- data.frame(x=data$accelerometerTimestamp_sinceReboot.s.,val = data_1,
                     variable = column_names)
 
 
-ggplot(data = final, aes(x=x, y=val,)) + geom_line(aes(colour=variable))+xlim(c(0,500))+  ggtitle("Core Motion Acc Data")
+ggplot(data = final, aes(x=x, y=val,)) + geom_line(aes(colour=variable))+  ggtitle("Core Motion Acc Data")
 
 
 #Gyroscope rotation
-gyroscope <- select(data,-1:-7,-11:-41)
+gyroscope <- select(data,-1:-9,-13:-29)
 
 data_1 <- as.vector(as.matrix(gyroscope))
-names <- colnames(data[8:10])
+names <- colnames(data[10:12])
 column_names <- sort(rep(names,nrow(gyroscope)))
 
-final <- data.frame(x=data$loggingSample.N.,val = data_1,
+final <- data.frame(x=data$motionTimestamp_sinceReboot.s.,val = data_1,
                     variable = column_names)
 
 
-ggplot(data = final, aes(x=x, y=val,)) + geom_line(aes(colour=variable))+xlim(c(0,500))+  ggtitle("Gyroscope")
+ggplot(data = final, aes(x=x, y=val,)) + geom_line(aes(colour=variable))+  ggtitle("Gyroscope")
 
 
 #Motion Rotation
@@ -116,10 +116,10 @@ ggplot(data = final, aes(x=x, y=val,)) + geom_line(aes(colour=variable))+xlim(c(
 
 
 #Motion Yaw,Roll,Pitch
-motion_yaw_roll_pitch <- select(data,-1:-11,-15:-41)
+motion_yaw_roll_pitch <- select(data,-1:-6,-10:-29)
 
 data_1 <- as.vector(as.matrix(motion_yaw_roll_pitch))
-names <- colnames(data[12:14])
+names <- colnames(data[7:9])
 
 motionYaw.rad. <- rep(names[1],nrow(motion_yaw_roll_pitch))
 motionRoll.rad. <- rep(names[2],nrow(motion_yaw_roll_pitch))
@@ -128,22 +128,22 @@ motionPitch.rad. <- rep(names[3],nrow(motion_yaw_roll_pitch))
 motion_options <- as.vector(as.matrix(motionYaw.rad.,motionRoll.rad.,motionPitch.rad.))
 column_names <- sort(rep(names,nrow(motion_yaw_roll_pitch)))
 
-final <- data.frame(x=data$loggingSample.N.,val = data_1,
+final <- data.frame(x=data$motionTimestamp_sinceReboot.s.,val = data_1,
                     variable = column_names)
 
-ggplot(data = final, aes(x=x, y=val,)) + geom_line(aes(colour=variable))+xlim(c(0,500)) + ggtitle("Yaw Pitch Roll")
+ggplot(data = final, aes(x=x, y=val,)) + geom_line(aes(colour=variable)) + ggtitle("Yaw Pitch Roll")
 
 
 #TO DO MOTION QUARTERNIONX.R
 #Motion Rotation
-motion_quaternion <- select(data,-1:-21,-26:-41)
+motion_quaternion <- select(data,-1:-16,-21:-29)
 
 data_1 <- as.vector(as.matrix(motion_quaternion))
-names <- colnames(data[22:25])
+names <- colnames(data[17:20])
 column_names <- sort(rep(names,nrow(motion_quaternion)))
 
-final <- data.frame(x=data$loggingSample.N.,val = data_1,
+final <- data.frame(x=data$motionTimestamp_sinceReboot.s.,val = data_1,
                     variable = column_names)
 
 
-ggplot(data = final, aes(x=x, y=val,)) + geom_line(aes(colour=variable))+xlim(c(0,500))+  ggtitle("Motion Quaternion")
+ggplot(data = final, aes(x=x, y=val,)) + geom_line(aes(colour=variable))+  ggtitle("Motion Quaternion")
