@@ -13,6 +13,7 @@ library(tidyr)
 library(viridis)
 library(treemap)
 library(webshot)
+
 #webshot::install_phantomjs()
 
 ################################################
@@ -21,8 +22,8 @@ library(webshot)
 ##  Create time series
 ###########################################################
 #mac path
-#path <-'/Users/nuno/IdeaProjects/project_R/'
-path <- "C:/Users/Nuno/IdeaProjects/project_R/"
+path <-'/Users/nuno/IdeaProjects/project_R/'
+#path <- "C:/Users/Nuno/IdeaProjects/project_R/"
 setwd(paste(path, "data/", sep = ""))
 
 gt <- read.csv("indian_food.csv", header = TRUE)

@@ -28,8 +28,8 @@ library(forecast)
 ###########################################################
 
 
-path <- "C:/Users/Nuno/IdeaProjects/project_R/"
-
+#path <- "C:/Users/Nuno/IdeaProjects/project_R/"
+path <-'/Users/nuno/IdeaProjects/project_R/'
 all_data <- data.frame()
 
 setwd(paste(path, "data/", sep = ""))

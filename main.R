@@ -40,8 +40,8 @@ summary(lifedata)
 
 ##  Set up storage of all following figures in a pdf and tabular info in a text file
 ##  Change these file directories to location of your output folder!!!
-pdf(file = "C:/Users/Nuno/IdeaProjects/project_R/output/convars.pdf")
-sink("C:/Users/Nuno/IdeaProjects/project_R/output/convars.txt")
+#pdf(file = "C:/Users/Nuno/IdeaProjects/project_R/output/convars.pdf")
+#sink("C:/Users/Nuno/IdeaProjects/project_R/output/convars.txt")
 
 ##  In Windows can either copy file path from windows explorer address bar or
 ##  hold the shift key and right click on the folder
@@ -218,8 +218,8 @@ concatfun <- function(eachvar, name, response){
 
 ##  Set up storage of all following figures in a pdf doc and tabular info in a text file
 ##  Change these file directories to location of your output folder!!!
-pdf(file="C:/Users/Nuno/IdeaProjects/project_R/output/catvarstats.pdf")
-sink("C:/Users/Nuno/IdeaProjects/project_R/output/catvarstats.txt")
+#pdf(file="C:/Users/Nuno/IdeaProjects/project_R/output/catvarstats.pdf")
+#sink("C:/Users/Nuno/IdeaProjects/project_R/output/catvarstats.txt")
 
 
 ##  Loop for sending categorical variables to categorical analysis function defined above

@@ -28,7 +28,8 @@ library(forecast)
 ##  Create time series
 ###########################################################
 
-path <- "C:/Users/Nuno/IdeaProjects/project_R/"
+#path <- "C:/Users/Nuno/IdeaProjects/project_R/"
+path <-'/Users/nuno/IdeaProjects/project_R/'
 setwd(paste(path, "data/part2/", sep = ""))
 
 
@@ -95,75 +96,7 @@ plot(gt.ts.decomp)
 ##  Can do this manually using diff() for trend and log for seasonality
 ##  Here we will use an automated method that takes care of stationarity for us
 
-model <- auto.arima(gt.ts)
-model
-
-##  Examine model diagnostics
-##  Plot ACF of model residuals to see if autocorrelation removed
-##  Further test autocorrelation using Ljung-Box test
-##  Examine histogram of residuals for Gaussian distribution
-
-checkresiduals(model)
-
-##  Forecast using ARIMA model and plot
-
-##  Forecast out # of time steps
-f <- forecast(model, h = 60)
-summary(f)
-str(f)
-f$mean
-
-
-##  Plot
-
-plot(f)
-autoplot(f)
-autoplot(f, include = 240)
-
-##  Tidy up the plot
-autoplot(f, include = 240) + ggtitle("Global temperatures forecast") +
-  xlab("Time (year)") + ylab("Temperatures (C) relative to 1950-1980 mean") +
-  theme_bw() + theme(plot.title = element_text(hjust = 0.5)) +
-  scale_x_continuous(breaks = seq(from = 1998, to = 2024, by = 2))
-
-##########################################################
-##  Perform accuracy assessment
-##########################################################
-
-##  Assess model accuracy
-accuracy(f)
-
-##  Cross Validation
-##  Create training and testing sets
-train <- head(gt.ts, round(length(gt.ts) * 0.8))
-t <- length(gt.ts) - length(train)
-test <- tail(gt.ts, t)
-
-## Plot training and test series
-autoplot(train) + autolayer(test)
-
-##  Re-fit ARIMA using training data only
-modeltrain <- auto.arima(train)
-
-##  Forecast through length of test set
-ftrain <- forecast(modeltrain, h = length(test))
-
-##  Assess accuracy of ARIMA model in simulating known test set
-accuracy(ftrain, test)
-
-## Plot
-autoplot(train) + autolayer(ftrain) + autolayer(test)
-
-
-##  Tidy up the plot a little
-autoplot(ftrain$mean, ylab = "Temperatures (C) relative to 1950-1980 mean") +
-  geom_ribbon(aes(ymin = ftrain$lower[,1], ymax = ftrain$upper[,1]), alpha=0.25) +
-  geom_ribbon(aes(ymin = ftrain$lower[,2], ymax = ftrain$upper[,2]), alpha=0.2) +
-  autolayer(test, series = "Test Data") + autolayer(train, series = "Training Data") +
-  autolayer(ftrain$mean, series = "Forecast") +
-  ggtitle("Global Temperatures Forecast Accuracy") + theme_bw() +
-  theme(plot.title = element_text(hjust = 0.5)) +
-  scale_color_manual(values = c("red", "blue", "black"))
+path <-'/Users/nuno/IdeaProjects/project_R/'
 
 #########################################################
 ##  Save output and time series data
