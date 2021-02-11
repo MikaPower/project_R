@@ -8,7 +8,8 @@ path <-'/Users/nuno/IdeaProjects/project_R/'
 #path <- "C:/Users/Nuno/IdeaProjects/project_R/"
 setwd(paste(path, "data/thesis", sep = ""))
 # Load dataset from github
-data <- read.csv("apple_watch_1_direita.csv", header = TRUE,sep = '|')
+files <- dir()
+data <- read.csv("direita/direita_test.csv", header = TRUE,sep = '|')
 # Number of digits for time omilliseconds
 my_options <- options(digits.secs = 3)
 #get first timestamp record to compare vs others
@@ -26,6 +27,7 @@ first_time <- data$loggingTime.txt.[1]
 #  return (result)
 #  }
 
+
 #returns the difference between first timestamp and the others timestamps
 calculate_time_start <- function (time_string){
   time <- strptime(time_string, "%Y-%m-%d %H:%M:%OS")
@@ -36,17 +38,29 @@ calculate_time_start <- function (time_string){
 
 data$loggingTime.txt. <- sapply(data$loggingTime.txt., calculate_time_start)
 
+
 acelo<- data.frame(
   day = data$loggingTime.txt.,
   value = data$accelerometerAccelerationX.G.)
 
-
 # Most basic bubble plot
 p <- ggplot(acelo, aes(x=day, y=value)) +
   geom_line() +
-  xlab("")
+  xlab("")+xlim(c(0,10))
 p
 
+#cut x seconds front and back
+data <- data[ data$loggingTime.txt. > 3 , ]
+data <- data[ data$loggingTime.txt. < 48 , ]
+
+acelo<- data.frame(
+  day = data$loggingTime.txt.,
+  value = data$accelerometerAccelerationX.G.)
+
+p <- ggplot(acelo, aes(x=day, y=value)) +
+  geom_line() +
+  xlab("")+xlim(c(2,10))
+p
 
 # Format 3: Several variables for each date
 info_acel <- data.frame(
@@ -84,9 +98,7 @@ final <- data.frame(x=data$loggingTime.txt.,val = data_1,
 ggplot(data = final, aes(x=x, y=val)) + geom_line(aes(colour=variable))+ggtitle("Raw Acce Data")
 
 #Accelarometer core motion
-core_motion <- select(data,-1:-12,-16:-29)
-
-data_1 <- as.vector(as.matrix(core_motion))
+data_1 <- as.vector(as.matrix(data[,c(13,14,15)]))
 names <- colnames(data[13:15])
 column_names <- sort(rep(names,nrow(data)))
 
@@ -98,7 +110,7 @@ ggplot(data = final, aes(x=x, y=val,)) + geom_line(aes(colour=variable))+  ggtit
 
 
 #Gyroscope rotation
-#gyroscope <- select(data,-1:-9,-13:-29)
+#gyroscope <- select(data,-1:-9,-13:-33)
 #
 #data_1 <- as.vector(as.matrix(gyroscope))
 #names <- colnames(dazta[10:12])
@@ -162,7 +174,7 @@ ggplot(data = final, aes(x=x, y=val,)) + geom_line(aes(colour=variable))+  ggtit
 
 test <- data.frame(data$motionRotationRateX.rad.s.,data$motionRotationRateY.rad.s.,data$motionRotationRateZ.rad.s.,data$accelerometerAccelerationX.G., data$accelerometerAccelerationY.G., data$accelerometerAccelerationZ.G.)
 colnames(test) <- c('rotation_x','rotation_y','rotation_z','acceleration_x','acceleration_y','acceleration_z')
-write.csv(test,"saved/1.csv", row.names = TRUE)
+write.csv(test,"saved/test/direita/1.csv", row.names = TRUE)
 
 
 
