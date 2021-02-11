@@ -160,8 +160,8 @@ ggplot(data = final, aes(x=x, y=val,)) + geom_line(aes(colour=variable))+  ggtit
 
 
 
-test <- data.frame(data$loggingTime.txt.,data$motionRotationRateX.rad.s.,data$motionRotationRateY.rad.s.,data$motionRotationRateZ.rad.s.,data$accelerometerAccelerationX.G., data$accelerometerAccelerationY.G., data$accelerometerAccelerationZ.G.)
-colnames(test) <- c('Time Stamp','rotation_x','rotation_y','rotation_z','acceleration_x','acceleration_y','acceleration_z')
+test <- data.frame(data$motionRotationRateX.rad.s.,data$motionRotationRateY.rad.s.,data$motionRotationRateZ.rad.s.,data$accelerometerAccelerationX.G., data$accelerometerAccelerationY.G., data$accelerometerAccelerationZ.G.)
+colnames(test) <- c('rotation_x','rotation_y','rotation_z','acceleration_x','acceleration_y','acceleration_z')
 write.csv(test,"saved/1.csv", row.names = TRUE)
 
 
