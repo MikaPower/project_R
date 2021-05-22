@@ -4,38 +4,33 @@ library(dplyr)
 library(anytime)
 library(nanotime)
 library(dygraphs)
-path <- '/Users/nuno/IdeaProjects/project_R/'
+path <- '/Users/nuno/IdeaProjects/project_R/data/thesis/'
 #path <- "C:/Users/Nuno/IdeaProjects/project_R/"
-setwd(paste(path, "data/thesis/movements", sep = ""))
+setwd(path)
 # Load dataset from github
-files <- dir()
+files <- dir(paste(path, 'movements/', sep = ""))
 for (file in files) {
-  next_directory <- paste("data/thesis/movements", file, sep = '/')
-  setwd(paste(path, next_directory, sep = ""))
-  classes <- dir()
+  #if(file!='validation'){
+  #  next
+  #}
+  next_directory <- paste("/movements", file, sep = '/')
+  classes <- dir(paste0(path, next_directory, sep = ''))
+  dir.create(paste0(path, '/saved/', file))
+  dir.create(paste0(path, '/saved/', file, '/photos'))
   for (class in classes) {
     next_class_directory <- paste(next_directory, class, sep = '/')
-    setwd(paste(path, next_class_directory, sep = ""))
-    excel_files <- dir()
+    dir.create(paste0(path, '/saved/', file, '/photos/', class))
+    dir.create(paste(path, 'saved', file, class, sep = '/'))
+    excel_files <- dir(paste0(path, next_class_directory))
     index_to_save <- 1
     for (excel in excel_files) {
-      data <- read.csv(excel, header = TRUE, sep = '|')
+      path_to_csv <- paste0(path, next_class_directory, '/', excel)
+      data <- read.csv(path_to_csv, header = TRUE, sep = '|')
+      print(excel)
       # Number of digits for time omilliseconds
       my_options <- options(digits.secs = 3)
       #get first timestamp record to compare vs others
       first_time <- data$loggingTime.txt.[1]
-
-
-      #join_times <- function(time_string) {
-      #  list_times <- strsplit(time_string, " ")
-      #  result <- paste(list_times[[1]][1],'T')
-      #  result <- paste(result,list_times[[1]][2])
-      #  result <- paste(result,list_times[[1]][3])
-      #  result <- gsub(" ", "", result, fixed = TRUE)
-      #  print("resultado: ")
-      #  print(result)
-      #  return (result)
-      #  }
 
 
       #returns the difference between first timestamp and the others timestamps
@@ -73,6 +68,7 @@ for (file in files) {
         geom_line() +
         xlab("") +
         xlim(c(2, 10))
+
       #print(p)
 
       # Format 3: Several variables for each date
@@ -99,82 +95,66 @@ for (file in files) {
       #  geom_line(aes(colour = variable))
 
       # Accelarometer raw
+      #data_1 <- as.vector(as.matrix(data[, c(3, 4, 5)]))
+      #names <- colnames(data[3:5])
+      #column_names <- sort(rep(names, nrow(data)))
+      #
+      #final <- data.frame(x = data$loggingTime.txt., val = data_1,
+      #                    variable = column_names)
+      #
+      #
+      #g <- ggplot(data = final, aes(x = x, y = val)) +
+      #  geom_line(aes(colour = variable)) +
+      #  ggtitle(paste("Raw Acce Data", file, class, excel, sep = " "))
+      #
+      #directory_to_save <- paste("data/thesis/saved", file, "photos", class, "acelarometro_raw", sep = "/")
+      #dir.create(file.path(paste(path, "data/thesis/saved", file, "photos", class, sep = '/')))
+      #dir.create(file.path(paste(path, directory_to_save, sep = '')))
+      #setwd(paste(path, directory_to_save, sep = ""))
+      #ggsave(filename = paste("Acelarometro_raw", "-", class, "-", excel, ".jpeg", sep = ""), g, device = "jpeg")
+      #dev.off()
+      #print(g)
+
+
+      calculate_graph <- function(table, names, title_graph, title_dir, sort = TRUE) {
+        if (sort) {
+          column_names <- sort(rep(names, nrow(data)))
+        }
+        else {
+          column_names <- names
+        }
+
+        final <- data.frame(x = data$loggingTime.txt., val = table,
+                            variable = column_names)
+
+
+        g <- ggplot(data = final, aes(x = x, y = val)) +
+          geom_line(aes(colour = variable)) +
+          ggtitle(paste(title_graph, file, class, excel, sep = " "))+xlim(c(8,16))
+
+        directory_to_save <- paste("/saved", file, "photos", class, title_dir, sep = "/")
+        dir.create(paste(path, directory_to_save, sep = ''))
+        ggsave(filename = paste(title_dir, "-", class, "-", excel, ".jpeg", sep = ""), path = paste0(path, directory_to_save), g, device = "jpeg")
+        print(g)
+        dev.off()
+      }
+
+
+      #raw accelarometer
       data_1 <- as.vector(as.matrix(data[, c(3, 4, 5)]))
       names <- colnames(data[3:5])
-      column_names <- sort(rep(names, nrow(data)))
+      calculate_graph(data_1, names, 'Raw Acce Data', 'Acelarometro_raw')
 
-      final <- data.frame(x = data$loggingTime.txt., val = data_1,
-                          variable = column_names)
-
-
-      g <- ggplot(data = final, aes(x = x, y = val)) +
-        geom_line(aes(colour = variable)) +
-        ggtitle(paste("Raw Acce Data", file, class, excel, sep = " "))
-
-      directory_to_save <- paste("data/thesis/saved", file, "photos", class, "acelarometro_raw", sep = "/")
-      dir.create(file.path(paste(path, "data/thesis/saved", file, "photos", class, sep = '/')))
-      dir.create(file.path(paste(path, directory_to_save, sep = '')))
-      setwd(paste(path, directory_to_save, sep = ""))
-      ggsave(filename = paste("Acelarometro_raw", "-", class, "-", excel, ".jpeg", sep = ""), g, device = "jpeg")
-      dev.off()
-      print(g)
-
-      #Accelarometer core motion
+      #Core motion acc
       data_1 <- as.vector(as.matrix(data[, c(13, 14, 15)]))
       names <- colnames(data[13:15])
-      column_names <- sort(rep(names, nrow(data)))
-
-      final <- data.frame(x = data$loggingTime.txt., val = data_1,
-                          variable = column_names)
+      calculate_graph(data_1, names, 'Core Motion Acc Data', 'acelarometro')
 
 
-      g <- ggplot(data = final, aes(x = x, y = val,)) +
-        geom_line(aes(colour = variable)) +
-        ggtitle(paste("Core Motion Acc Data", file, class, excel, sep = " "))
-
-      directory_to_save <- paste("data/thesis/saved", file, "photos", class, "acelarometro", sep = "/")
-      dir.create(file.path(paste(path, directory_to_save, sep = '')))
-      setwd(paste(path, directory_to_save, sep = ""))
-      ggsave(filename = paste("Acelerômetro", "-", class, "-", excel, ".jpeg", sep = ""), g, device = "jpeg")
-      dev.off()
-      print(g)
-
-
-      #Gyroscope rotation
-      #gyroscope <- select(data,-1:-9,-13:-33)
-      #
-      #data_1 <- as.vector(as.matrix(gyroscope))
-      #names <- colnames(dazta[10:12])
-      #column_names <- sort(rep(names,nrow(gyroscope)))
-      #
-      #final <- data.frame(x=data$loggingTime.txt.,val = data_1,
-      #                    variable = column_names)
-
-      #ggplot(data = final, aes(x=x, y=val,)) + geom_line(aes(colour=variable))+  ggtitle("Gyroscope")
-
-
-      #Motion Rotation
-      motion_gyroscope <- select(data, -1:-9, -13:-ncol(data))
-
-      data_1 <- as.vector(as.matrix(motion_gyroscope))
+      #Motion gyroscope
+      data_1 <- as.vector(as.matrix(select(data, -1:-9, -13:-ncol(data))))
       names <- colnames(data[10:12])
-      column_names <- sort(rep(names, nrow(motion_gyroscope)))
-
-      final <- data.frame(x = data$loggingTime.txt., val = data_1,
-                          variable = column_names)
-
-
-      g <- ggplot(data = final, aes(x = x, y = val,)) +
-        geom_line(aes(colour = variable)) +
-        ggtitle(paste("Motion rotation gyroscope", file, class, excel, sep = " "))
-
-      directory_to_save <- paste("data/thesis/saved", file, "photos", class, "giroscopio", sep = "/")
-      dir.create(file.path(paste(path, directory_to_save, sep = '')))
-      setwd(paste(path, directory_to_save, sep = ""))
-
-      ggsave(filename = paste("Giroscopio", "-", class, "-", excel, ".jpeg", sep = ""), g, device = "jpeg")
-      dev.off()
-      print(g)
+      calculate_graph(data_1, names, 'Motion rotation gyroscope', 'giroscopio')
 
 
       #Motion Yaw,Roll,Pitch
@@ -182,72 +162,41 @@ for (file in files) {
 
       data_1 <- as.vector(as.matrix(motion_yaw_roll_pitch))
       names <- colnames(data[7:9])
-
       motionYaw.rad. <- rep(names[1], nrow(motion_yaw_roll_pitch))
       motionRoll.rad. <- rep(names[2], nrow(motion_yaw_roll_pitch))
       motionPitch.rad. <- rep(names[3], nrow(motion_yaw_roll_pitch))
-
-      motion_options <- as.vector(as.matrix(motionYaw.rad., motionRoll.rad., motionPitch.rad.))
-      column_names <- sort(rep(names, nrow(motion_yaw_roll_pitch)))
-
-      final <- data.frame(x = data$loggingTime.txt., val = data_1,
-                          variable = column_names)
-
-      g <- ggplot(data = final, aes(x = x, y = val,)) +
-        geom_line(aes(colour = variable)) +
-      ggtitle(paste("Yaw Pitch Roll", file, class, excel, sep = " "))
-
-      directory_to_save <- paste("data/thesis/saved", file, "photos", class, "motion_yaw", sep = "/")
-      dir.create(file.path(paste(path, directory_to_save, sep = '')))
-      setwd(paste(path, directory_to_save, sep = ""))
-      ggsave(filename = paste("Motion Yaw, Roll, Pitch", "-", class, "-", excel, ".jpeg", sep = ""), g, device = "jpeg")
-      dev.off()
-      print(g)
+      names <- c(motionYaw.rad., motionRoll.rad., motionPitch.rad.)
+      calculate_graph(data_1, names, 'Yaw Pitch Roll', 'giroscopio', FALSE)
 
 
-      #TO DO MOTION QUARTERNIONX.R
       #Motion Rotation
       motion_quaternion <- select(data, -1:-16, -21:-ncol(data))
-
       data_1 <- as.vector(as.matrix(motion_quaternion))
       names <- colnames(data[17:20])
-      column_names <- sort(rep(names, nrow(motion_quaternion)))
+      motionQuaternionX.R. <- rep(names[1], nrow(data))
+      motionQuaternionY.R. <- rep(names[2], nrow(data))
+      motionQuaternionZ.R. <- rep(names[3], nrow(data))
+      motionQuaternionW.R. <- rep(names[4], nrow(data))
+      names <- c(motionQuaternionX.R., motionQuaternionY.R., motionQuaternionZ.R., motionQuaternionW.R.)
 
-      final <- data.frame(x = data$loggingTime.txt., val = data_1,
-                          variable = column_names)
-
-
-      g <- ggplot(data = final, aes(x = x, y = val,)) +
-        geom_line(aes(colour = variable)) +
-        ggtitle(paste("Motion Quaternion", file, class, excel, sep = " "))
-
-      directory_to_save <- paste("data/thesis/saved", file, "photos", class, "quartz", sep = "/")
-      dir.create(file.path(paste(path, directory_to_save, sep = '')))
-      setwd(paste(path, directory_to_save, sep = ""))
-
-      ggsave(filename = paste("Quartz", "-", class, "-", excel, ".jpeg", sep = ""), g, device = "jpeg")
-      dev.off()
-
-      print(g)
-
-
+      calculate_graph(data_1, names, 'Motion Quaternion', 'quartz', FALSE)
+      #test <- data.frame(data$motionRotationRateX.rad.s., data$motionRotationRateY.rad.s.,
+      #                   data$motionRotationRateZ.rad.s., data$accelerometerAccelerationX.G.,
+      #                   data$accelerometerAccelerationY.G., data$accelerometerAccelerationZ.G.,
+      #                   data$motionQuaternionX.R., data$motionQuaternionY.R., data$motionQuaternionZ.R.,
+      #                   data$motionQuaternionW.R.)
 
       test <- data.frame(data$motionRotationRateX.rad.s., data$motionRotationRateY.rad.s.,
-                         data$motionRotationRateZ.rad.s., data$accelerometerAccelerationX.G.,
-                         data$accelerometerAccelerationY.G., data$accelerometerAccelerationZ.G.,
+                         data$motionRotationRateZ.rad.s., data$motionUserAccelerationX.G.,
+                         data$motionUserAccelerationY.G., data$motionUserAccelerationZ.G.,
                          data$motionQuaternionX.R., data$motionQuaternionY.R., data$motionQuaternionZ.R.,
                          data$motionQuaternionW.R.)
       colnames(test) <- c('rotation_x', 'rotation_y', 'rotation_z', 'acceleration_x', 'acceleration_y', 'acceleration_z', 'motionQuaternionX',
                           'motionQuaternionY', 'motionQuaternionZ', 'motionQuaternionW')
       #Join path to save directory
-      directory_to_save <- paste("data/thesis/saved", file, class, sep = "/")
-      dir.create(file.path(paste(path, directory_to_save, sep = '/')))
-      setwd(paste(path, directory_to_save, sep = ""))
-      write.csv(test, paste(index_to_save, "csv", sep = "."), row.names = FALSE)
+      directory_to_save <- paste(path, "saved", file, class, sep = "/")
+      write.csv(test, paste0(directory_to_save, '/', index_to_save, ".csv"), row.names = FALSE)
       index_to_save <- index_to_save + 1
-      #Restore current working directory
-      next_class_directory <- paste(next_directory, class, sep = '/')
-      setwd(paste(path, next_class_directory, sep = ""))
     }
   }
 }
