@@ -82,10 +82,16 @@ There's multiple R files. Below is a description of what each one does:
                         stroke detection algorithm based on peak acceleration, each stroke has a defined threshold and a corresponding axis. 
                         This parameters can be changed to fit new purposes. It produces a csv file containing 46 frames of data (enough for a stroke recognition) for each stroke detected during the input session recorded
                         
-* "thesis_with_cuts_and_files_python_all_axis_model.R" = The same as thesis_with_cuts_and_files_python.R but instead of a single file per movement 
+* "thesis_with_cuts_and_files_python_all_axis_modelv2_no_rest.R" = The same as thesis_with_cuts_and_files_python.R but instead of a single file per movement 
 detected, it generates 6 files(one for each axis) with rows containing 47 (columns), 46 columns represent the stroke movement, the 47th represent the stroke id
-and each row represents a stroke performed. This input is the one used for CNN-LSTM and convLSTM models         
+and each row represents a stroke performed. Does not create rest samples. This input can be used for CNN-LSTM and convLSTM models
+
+* "thesis_with_cuts_and_files_python_all_axis_modelv4_diff_rest.R" = The same as thesis_with_cuts_and_files_python_all_axis_modelv2_no_rest.R but generates
+rest samples from the stroke detection algorithm everytime every frame not containing a peak acceleration. The rest samples are also based on each movement.
+ This input is the perfect to be used for CNN-LSTM and convLSTM models and it was the used on the pre defined models.                  
      
+* "thesis_with_cuts_same_folder.R" = Removes unnecessary columns, normalizes the timestamp, uses the stroke detection algorithm, produces no rest samples.
+The only difference is that it produces the output in a single folder. No transpose happens
 
 
 
