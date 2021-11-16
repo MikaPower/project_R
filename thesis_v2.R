@@ -10,14 +10,12 @@ setwd(path)
 # Load dataset from github
 files <- dir(paste(path, 'movements/', sep = ""))
 for (file in files) {
-  #if(file!='validation'){
-  #  next
-  #}
   next_directory <- paste("/movements", file, sep = '/')
   classes <- dir(paste0(path, next_directory, sep = ''))
   dir.create(paste0(path, '/saved/', file))
   dir.create(paste0(path, '/saved/', file, '/photos'))
   for (class in classes) {
+
     next_class_directory <- paste(next_directory, class, sep = '/')
     dir.create(paste0(path, '/saved/', file, '/photos/', class))
     dir.create(paste(path, 'saved', file, class, sep = '/'))
@@ -125,12 +123,13 @@ for (file in files) {
         }
 
         final <- data.frame(x = data$loggingTime.txt., val = table,
-                            variable = column_names)
+                            Axis = column_names)
 
 
-        g <- ggplot(data = final, aes(x = x, y = val)) +
-          geom_line(aes(colour = variable)) +
-          ggtitle(paste(title_graph, file, class, excel, sep = " "))+xlim(c(8,16))
+        g <- ggplot(data = final, aes(x = x, y = val))+xlim(c(8,16))+
+          geom_line(aes(colour = Axis)) +
+          ggtitle(paste(title_graph, file, class, excel, sep = " "))+theme(legend.position ="bottom")+
+          ylab("Force (G's)")+xlab("Time (s)")+labs(fill= "Axis")+scale_fill_discrete(name="Axis")
 
         directory_to_save <- paste("/saved", file, "photos", class, title_dir, sep = "/")
         dir.create(paste(path, directory_to_save, sep = ''))

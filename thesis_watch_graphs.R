@@ -25,7 +25,10 @@ for (class in classes) {
   index_to_save <- 1
   files <- dir(paste('modes', class, sep = '/'))
   dir.create(paste('graphs', class, sep = '/'))
+
   for (file in files) {
+
+
     data <- read.csv(paste('modes', class, file, sep = '/'), header = TRUE, sep = '|')
     #get first timestamp record to compare vs others
     first_time <- data$loggingTime.txt.[1]
@@ -45,12 +48,14 @@ for (class in classes) {
       }
 
       final <- data.frame(x = data$loggingTime.txt., val = table,
-                          variable = column_names)
+                          Axis = column_names)
 
 
       g <- ggplot(data = final, aes(x = x, y = val)) +
-        geom_line(aes(colour = variable)) +
-        ggtitle(paste(title_graph, class, file, sep = " "))#+xlim(c(4,10))
+        geom_line(aes(colour = Axis)) +
+        #ggtitle(paste(title_graph, class, file, sep = " "))+
+        xlim(c(4,10))+theme(text=element_text(size = 20))+theme(legend.position ="bottom")+
+        ylab("Force (G's)")+xlab("Time (s)")+labs(fill= "Axis")+scale_fill_discrete(name="Axis")
       show(g)
 
       directory_to_save <- paste("graphs", class, title_dir, sep = "/")
@@ -60,9 +65,9 @@ for (class in classes) {
     }
 
     #raw accelarometer
-    data_1 <- as.vector(as.matrix(data[, c(3, 4, 5)]))
-    names <- colnames(data[3:5])
-    calculate_graph(data_1, names, 'Raw Acce Data', 'Acelarometro_raw')
+    #data_1 <- as.vector(as.matrix(data[, c(3, 4, 5)]))
+    #names <- colnames(data[3:5])
+    #calculate_graph(data_1, names, 'Raw Acce Data', 'Acelarometro_raw')
 
     #Core motion acc
     data_1 <- as.vector(as.matrix(data[, c(13, 14, 15)]))
@@ -71,28 +76,28 @@ for (class in classes) {
 
 
     #Motion gyroscope
-    data_1 <- as.vector(as.matrix(select(data, -1:-9, -13:-ncol(data))))
-    names <- colnames(data[10:12])
-    calculate_graph(data_1, names, 'Motion rotation gyroscope', 'giroscopio')
+    #data_1 <- as.vector(as.matrix(select(data, -1:-9, -13:-ncol(data))))
+    #names <- colnames(data[10:12])
+    #calculate_graph(data_1, names, 'Motion rotation gyroscope', 'giroscopio')
 
 
     #Motion Yaw,Roll,Pitch
     motion_yaw_roll_pitch <- select(data, -1:-6, -10:-ncol(data))
 
-    data_1 <- as.vector(as.matrix(motion_yaw_roll_pitch))
-    names <- colnames(data[7:9])
-    motionYaw.rad. <- rep(names[1], nrow(motion_yaw_roll_pitch))
-    motionRoll.rad. <- rep(names[2], nrow(motion_yaw_roll_pitch))
-    motionPitch.rad. <- rep(names[3], nrow(motion_yaw_roll_pitch))
-    names <- c(motionYaw.rad., motionRoll.rad., motionPitch.rad.)
-    calculate_graph(data_1, names, 'Yaw Pitch Roll', 'giroscopio', FALSE)
+    #data_1 <- as.vector(as.matrix(motion_yaw_roll_pitch))
+    #names <- colnames(data[7:9])
+    #motionYaw.rad. <- rep(names[1], nrow(motion_yaw_roll_pitch))
+    #motionRoll.rad. <- rep(names[2], nrow(motion_yaw_roll_pitch))
+    #motionPitch.rad. <- rep(names[3], nrow(motion_yaw_roll_pitch))
+    #names <- c(motionYaw.rad., motionRoll.rad., motionPitch.rad.)
+    #calculate_graph(data_1, names, 'Yaw Pitch Roll', 'giroscopio', FALSE)
 
 
     #Motion Rotation
-    motion_quaternion <- select(data, -1:-16, -21:-ncol(data))
-    data_1 <- as.vector(as.matrix(motion_quaternion))
-    names <- colnames(data[17:20])
-    calculate_graph(data_1, names, 'Motion Quaternion', 'quartz')
+    #motion_quaternion <- select(data, -1:-16, -21:-ncol(data))
+    #data_1 <- as.vector(as.matrix(motion_quaternion))
+    #names <- colnames(data[17:20])
+    #calculate_graph(data_1, names, 'Motion Quaternion', 'quartz')
   }
 }
 

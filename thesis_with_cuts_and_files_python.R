@@ -26,7 +26,6 @@ for (file in files) {
     excel_files <- dir(paste0(path, next_class_directory))
     index_to_save <- 1
     for (excel in excel_files) {
-
       path_to_csv <- paste0(path, next_class_directory, '/', excel)
       data <- read.csv(path_to_csv, header = TRUE, sep = '|')
       data <-na.omit(data)
@@ -94,20 +93,20 @@ for (file in files) {
           func_data <- as.vector(as.matrix(mini_sub[, c(13, 14, 15)]))
           names <- colnames(mini_sub[3:5])
 
-          #calculate_graph(func_data, names, 'Acce Data', 'Acelarometro', TRUE,mini_sub,count)
+          calculate_graph(func_data, names, 'Acce Data', 'Acelarometro', TRUE,mini_sub,count)
           count <- count+1
-          label <- rep(class , nrow(mini_sub))
-          test <- data.frame(mini_sub$motionRotationRateX.rad.s., mini_sub$motionRotationRateY.rad.s.,
-                             mini_sub$motionRotationRateZ.rad.s., mini_sub$motionUserAccelerationX.G.,
-                             mini_sub$motionUserAccelerationY.G., mini_sub$motionUserAccelerationZ.G.,
-                             mini_sub$motionQuaternionX.R., mini_sub$motionQuaternionY.R., mini_sub$motionQuaternionZ.R.,
-                             mini_sub$motionQuaternionW.R.,label)
-          colnames(test) <- c('rotation_x', 'rotation_y', 'rotation_z', 'acceleration_x', 'acceleration_y', 'acceleration_z', 'motionQuaternionX',
-                              'motionQuaternionY', 'motionQuaternionZ', 'motionQuaternionW','label')
-          #Join path to save directory
-          directory_to_save <- paste(path, "saved", file, class, sep = "/")
-          write.csv(test, paste0(directory_to_save, '/', index_to_save, ".csv"), row.names = FALSE)
-          index_to_save <- index_to_save + 1
+          #label <- rep(class , nrow(mini_sub))
+          #test <- data.frame(mini_sub$motionRotationRateX.rad.s., mini_sub$motionRotationRateY.rad.s.,
+          #                   mini_sub$motionRotationRateZ.rad.s., mini_sub$motionUserAccelerationX.G.,
+          #                   mini_sub$motionUserAccelerationY.G., mini_sub$motionUserAccelerationZ.G.,
+          #                   mini_sub$motionQuaternionX.R., mini_sub$motionQuaternionY.R., mini_sub$motionQuaternionZ.R.,
+          #                   mini_sub$motionQuaternionW.R.,label)
+          #colnames(test) <- c('rotation_x', 'rotation_y', 'rotation_z', 'acceleration_x', 'acceleration_y', 'acceleration_z', 'motionQuaternionX',
+          #                    'motionQuaternionY', 'motionQuaternionZ', 'motionQuaternionW','label')
+          ##Join path to save directory
+          #directory_to_save <- paste(path, "saved", file, class, sep = "/")
+          #write.csv(test, paste0(directory_to_save, '/', index_to_save, ".csv"), row.names = FALSE)
+          #index_to_save <- index_to_save + 1
 
         }
         else{
