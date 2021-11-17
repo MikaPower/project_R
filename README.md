@@ -74,6 +74,7 @@ There's multiple R files. Below is a description of what each one does:
 * "thesis_with_cuts_and_files_python.R" = Removes unnecessary columns, normalizes the timestamp, creates graphics based on defined timestamps, applies a 
                         stroke detection algorithm based on peak acceleration, each stroke has a defined threshold and a corresponding axis. 
                         This parameters can be changed to fit new purposes. It produces a csv file containing 46 frames of data (enough for a stroke recognition) for each stroke detected during the input session recorded
+                        Use this one to create the dataset to be used in Create ML
                         
 * "thesis_with_cuts_and_files_python_all_axis_modelv2_no_rest.R" = The same as thesis_with_cuts_and_files_python.R but instead of a single file per movement 
 detected, it generates 6 files(one for each axis) with rows containing 47 (columns), 46 columns represent the stroke movement, the 47th represent the stroke id
