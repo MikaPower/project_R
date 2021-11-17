@@ -19,18 +19,11 @@
       <a href="#about-the-project">About The Project</a>
     </li>
     <li>
-          <a href="#datasets">Datasets</a>
+          <a href="#folders">Folders</a>
     </li>
     <li>
-      <a href="#getting-started">Getting Started</a>
-      <ul>
-        <li><a href="#prerequisites">Prerequisites</a></li>
-        <li><a href="#installation">Installation</a></li>
-      </ul>
+      <a href="#r-files">R files</a>
     </li>
-    <li><a href="#usage">Usage</a></li>
-    <li><a href="#contributing">Contributing</a></li>
-    <li><a href="#license">License</a></li>
     <li><a href="#contact">Contact</a></li>
   </ol>
 </details>
@@ -84,190 +77,75 @@ There's multiple R files. Below is a description of what each one does:
                         
 * "thesis_with_cuts_and_files_python_all_axis_modelv2_no_rest.R" = The same as thesis_with_cuts_and_files_python.R but instead of a single file per movement 
 detected, it generates 6 files(one for each axis) with rows containing 47 (columns), 46 columns represent the stroke movement, the 47th represent the stroke id
-and each row represents a stroke performed. Does not create rest samples. This input can be used for CNN-LSTM and convLSTM models
+and each row represents a stroke performed. Does not create rest samples. This input can be used for CNN-LSTM and convLSTM models. The output can be found
+on data/thesis/full_df
 
 * "thesis_with_cuts_and_files_python_all_axis_modelv4_diff_rest.R" = The same as thesis_with_cuts_and_files_python_all_axis_modelv2_no_rest.R but generates
 rest samples from the stroke detection algorithm everytime every frame not containing a peak acceleration. The rest samples are also based on each movement.
- This input is the perfect to be used for CNN-LSTM and convLSTM models and it was the used on the pre defined models.                  
+ This input is the perfect to be used for CNN-LSTM and convLSTM models and it was the used on the pre defined models. The output can be found on 
+ data/thesis/full_df                                                                                                                                   
      
 * "thesis_with_cuts_same_folder.R" = Removes unnecessary columns, normalizes the timestamp, uses the stroke detection algorithm, produces no rest samples.
 The only difference is that it produces the output in a single folder. No transpose happens
 
+The outputs of each R file goes to either data/thesis/saved for Create ML, or data/thesis/full_df if the data is to be used on CNN-LSTM or ConvLSTM models.
+
+The remaining R files can be ignored.
 
 
 
+Some values such as paths, threshold,s stroke labels id, the amount of frames for the stroke cut algorithm, the axis in which the algorithm works can be changed
 
-The ML models are the following:
-* Create ML - Apple's Machine learning tool
-* CNN-LSTM - one-dimensional Convolutional Neural Network LSTM - `CNN-LSTM.py`
-* ConvLSTM - one-dimensional Convolutional LSTM - `convLSTM.py`
+## Values to change FAQ
+**Question:** I'm gettings error running the project?
 
-## Datasets
-On the datasets folders its possible to find the following specifications:
-* Raw
-* Pre-processed
-
-###Raw
-The raw folder is where the files have not been touched or altered in anyway.
-This folder contains the two types of dataset adquired.
-One fast dataset where a robot would send a ball every 1.166 seconds and a 
-slow dataset where the robot would send a ball every 1.74 seconds.
-Each of this types has 6 classes representing each movement (rest, right top spin, left top spin, 
-block, right flip, left flip.)
-Each file represents a session with an athlete where it was asked to do the respective 
-movement until the robot had no more balls to shoot.
-
-
-###Pre-processed
-On this folder is possible to find 2 raw datasets plus 3 pre-processed created from the raw dataset ready to copy and paste on createML
-
-####D1-fast
-* Composed by data from the fast dataset from RAW
-* unnecessary data removed
-* renamed columns  
-* timestamp column was converted as starting from zero
-* train and test data randomly separated
-
-#####D2-slow
-* Same features as the fast dataset but instead using the slow dataset from raw data.
-
-#####D3-fast-cut
-This dataset contains the data from D1-fast dataset. Then a stroke detection algorithm 
-was applied (if forces on any axis were greater then 1m/s then create a prediction windows) and a windows prediction
-of size 46 was cut for every possible movement detected.
-This dataset contains a folder for each type of movement and each movement folder contains multiple files in which a file
-represents the corresponding movement.
-
-For the rest class, samples were obtained from the stroke algorithm for each time no stroke was being detected.
-
-
-* Same data as D1-fast
-* Movement detection algorithm applied.
-* Renamed columns  
-* Timestamp column converted as starting from zero
-
-slow_&_fast_dataset_with_cut_movements_separated
-
-#####D4-slow-cut
-This dataset contains the data from D2-slow dataset. The same stroke detection algorithm was applied
-
-* Same data as D2-slow
-* Movement detection algorithm applied.
-* Renamed columns  
-* Timestamp column converted as starting from zero
-
-
-
-#####D5-fast-slow-cut
-This dataset merges both D3-fast-cut and D4-slow-cut. 
-* D3-fast-cut and D4-slow-cut from raw data merged together
-* Movement detection algorithm applied.
-* Renamed columns  
-* Timestamp column converted as starting from zero
-
-
-Dataset where files are separated into train and test folders (80%, 20%) using `train_test_sep_data.py`
-which sorts all the files by class randomly. 
-
-
-## ML Models
-### CreateML
-On this folder is possible to find the 5 pre-processed datasets created from the raw dataset ready to copy and paste on createML.
-
-
-### CNN-LSTM
-This folder contains only D3-fast, D4-slow and D5-fast-slow-cut were used. These datasets were used to generate the CNN-LSTM model
-Then for each dataset, a further pre-processing was applied to fit the model requirements.
-For each dataset folder, the folder contains a file for every axis represented on an accelerometer and gyroscope sensor.
-Each file has multiple rows with 47 columns where the first 46 represents sensor data of the 
-respective axxis and sensor and the last class represents the movement id corresponding to sensor data
-   * "right_top_spin" = 0 
-   * "left_top_spin" = 1, 
-   * "block" = 2, 
-   * "right_flip" = 3, 
-   * "left_flip" = 4, 
-   * "rest" = 5
-   
-###ConvLSTM
-The same folder structure as CNN-LSTM. 
-
-
- The code for the algorithm applied to the raw dataset can be seen here: 
- Github link:
- TO-DO
-<!--* [R](https://www.r-project.org/)-->
-
-
-
-
-<!-- GETTING STARTED -->
-## Getting Started
-
-
-
-### Prerequisites
-
-* Python 3
-  ```sh
-  https://www.python.org/downloads/
+**Answer:**  Make sure you change the line to your current project path
   ```
-* Jupyter-notebook
+path <- '/Users/nuno/IdeaProjects/project_R/data/thesis/'
   ```
-  https://jupyter-notebook-beginner-guide.readthedocs.io/en/latest/install.html#
-  ```
+Also if this doesn't fix it, try to use the debug on code lines based on paths, and make sure you have the folders necessary.
 
-### Installation
+**Question:** I want to change the number of data frames on the stroke detection algorithm
 
-
-1. Clone the repo
-   ```sh
-   git clone https://github.com/your_username_/Project-Name.git
-   ```
-2. Create a virtual environment
-   ```sh
-   python3 -m venv /path/to/new/virtual/environment
-   ```
-3. Install the requirements on the virtual using  `requirements.txt`
-   ```JS
-   pip3 install -r requirements.txt;
-   ```
+**Answer:**  Look for this line of code and change the number                                                                       
+ ```
+            mini_sub <- data[row:(row+45),]
+            row <- row+45
+ ```
+Also search for the number 45 and 46 and replace with the number you want
 
 
+**Question:** I want to change the threshold of the peak stroke detection algorithm 
 
-<!-- USAGE EXAMPLES -->
-## Usage
-Run the any of the ML Models
-   ```JS
-   jupyter notebook
-   python3 LSTM.py
-   python3 CNN-LSTM.py
-   python3 convLSTM.py
-   ```
+**Answer:**  Look for this line of code and change the number for each stroke label, the current its 1 G(s) gforce
 
-To change the dataset for the CNN-LSTM and convLSTM models, just change the directory on function
-```
-def load_dataset_group():
-```
-<!-- CONTRIBUTING -->
-## Contributing
+      limit_val <- switch(class, "bloco" = 1, "flip_direita" = 1, "flip_esquerda" = 1, "top_spin_esquerda" = 1, "top_spin_direita" = 1)
 
-At the time of writting this readme no contributions are allowed
+**Question:** I want to change the label id (used for CNN-LSTM and convLSTM) 
 
+**Answer:**  Look for this line of code and change the number,
 
+        label_name <- switch(class, "bloco" = 2, "flip_direita" = 3, "flip_esquerda" = 4, "top_spin_esquerda" = 1, "top_spin_direita" = 0)
+if the file also produces Rest samples, and you also want to change the Rest class id, look for this line and change the 5 to the id you want
+        
+        label <- matrix(rep(5, 1), nrow(small_matrix))
+        
+**Question:** I want to change the axis that the stroke peak acceleration stroke detection uses for each stroke label. 
 
+**Answer:**  Look for this line of code and change the letter before the ".G.", to either X,Y,Z
 
-<!-- LICENSE -->
-## License
-Distributed under the MIT License. See `LICENSE` for more information.
+        limit_axis <- switch(class, "bloco" = 'motionUserAccelerationZ.G.', "flip_direita" = 'motionUserAccelerationX.G.', "flip_esquerda" = 'motionUserAccelerationZ.G.', "top_spin_esquerda" = 'motionUserAccelerationZ.G.', "top_spin_direita" = 'motionUserAccelerationX.G.')
+
+**Question:** I want to do nothing. 
+
+**Answer:**  Search for the project in finder, and use COMAND+ BACKSPACE to delete the project :)
 
 
 
 <!-- CONTACT -->
 ## Contact
 
-Nuno Ferreira  - 35053@ufp.edu.pt
-
-Project Link: [https://github.com/MikaPower/ai_ping_pong](https://github.com/MikaPower/ai_ping_pong)
+Nuno Ferreira  - 35053@ufp.edu.pt or nunoalf@hotmail.com
 
 
 
@@ -277,18 +155,4 @@ Project Link: [https://github.com/MikaPower/ai_ping_pong](https://github.com/Mik
 
 
 
-<!-- MARKDOWN LINKS & IMAGES -->
-<!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
-[contributors-shield]: https://img.shields.io/github/contributors/othneildrew/Best-README-Template.svg?style=for-the-badge
-[contributors-url]: https://github.com/othneildrew/Best-README-Template/graphs/contributors
-[forks-shield]: https://img.shields.io/github/forks/othneildrew/Best-README-Template.svg?style=for-the-badge
-[forks-url]: https://github.com/othneildrew/Best-README-Template/network/members
-[stars-shield]: https://img.shields.io/github/stars/othneildrew/Best-README-Template.svg?style=for-the-badge
-[stars-url]: https://github.com/othneildrew/Best-README-Template/stargazers
-[issues-shield]: https://img.shields.io/github/issues/othneildrew/Best-README-Template.svg?style=for-the-badge
-[issues-url]: https://github.com/othneildrew/Best-README-Template/issues
-[license-shield]: https://img.shields.io/github/license/othneildrew/Best-README-Template.svg?style=for-the-badge
-[license-url]: https://github.com/othneildrew/Best-README-Template/blob/master/LICENSE.txt
-[linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
-[linkedin-url]: https://linkedin.com/in/othneildrew
-[product-screenshot]: images/screenshot.png
+
