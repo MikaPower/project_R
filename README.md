@@ -65,8 +65,8 @@ Also data generated graphics can be found on thesis/saved/train/photos and thesi
 ## R Files
 There's multiple R files. Below is a description of what each one does:
 
- * "thesis_v2.R" =  Removes unnecessary columns, normalizes the timestamp, creates graphics based on defined timestamps and produces a csv file for 
- each recorded input.
+ * "datasets_filtering_no_cuts.R" =  Removes unnecessary columns, normalizes the timestamp, creates graphics based on defined timestamps and produces a csv file for 
+ each recorded input. Can generate D1,D2,D3,D4 and D5 for Create ML
  
  * "thesis_watch_graphs.R" = Removes unnecessary columns, normalizes the timestamp, creats graphics from data recorded files inserted on folder 
  thesis/misc/modes and outputs the graphics to thesis/misc/graphs
@@ -74,7 +74,7 @@ There's multiple R files. Below is a description of what each one does:
 * "thesis_with_cuts_and_files_python.R" = Removes unnecessary columns, normalizes the timestamp, creates graphics based on defined timestamps, applies a 
                         stroke detection algorithm based on peak acceleration, each stroke has a defined threshold and a corresponding axis. 
                         This parameters can be changed to fit new purposes. It produces a csv file containing 46 frames of data (enough for a stroke recognition) for each stroke detected during the input session recorded
-                        Use this one to create the dataset to be used in Create ML
+                        Use this one to create the dataset to be used in Create ML for better scores then datasets_filtering_no_cuts.R
                         
 * "thesis_with_cuts_and_files_python_all_axis_modelv2_no_rest.R" = The same as thesis_with_cuts_and_files_python.R but instead of a single file per movement 
 detected, it generates 6 files(one for each axis) with rows containing 47 (columns), 46 columns represent the stroke movement, the 47th represent the stroke id
@@ -140,6 +140,11 @@ if the file also produces Rest samples, and you also want to change the Rest cla
 **Question:** I want to do nothing. 
 
 **Answer:**  Search for the project in finder, and use COMAND+ BACKSPACE to delete the project :)
+
+**Question:** I want to create D5-fast-slow-cut dataset.
+
+**Answer:**  Search for the project in finder, and use COMAND+ BACKSPACE to delete the project :)
+
 
 
 
