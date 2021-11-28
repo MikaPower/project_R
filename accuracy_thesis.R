@@ -22,7 +22,7 @@ data %>%
   geom_bar(stat = "identity", fill = "#f68060", alpha = .6, width = .4) +
   coord_flip() +
   xlab("Athetes") +
-  ylab("Movement Accuracy") +
+  ylab("Stroke Accuracy") +
   theme_bw() +
   ggtitle("Application accuracy per movement") +
   theme(plot.title = element_text(hjust = 0.5), text = element_text(size = 20))
@@ -49,8 +49,8 @@ data <- data.frame(specie, condition, value)
 # Grouped
 ggplot(data, aes(fill = condition, y = value * 100, x = specie)) +
   geom_bar(position = "dodge", stat = "identity") +
-  xlab("Movements Types") +
+  xlab("Stroke Types") +
   ylab("Percentage %") +
-  ggtitle("Movement Detection Positive vs Negative count ") +
+  ggtitle("Stroke Detection Positive vs Negative count ") +
   theme(plot.title = element_text(hjust = 0.5))+
   labs(fill = "Condition type (%)")
